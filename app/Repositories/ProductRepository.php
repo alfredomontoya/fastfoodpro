@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Product;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 
 class ProductRepository
 {
@@ -50,5 +51,18 @@ class ProductRepository
     public function delete(Product $product): ?bool
     {
         return $product->delete();
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function listByCategory(int $categoryId, bool $activeOnly = true): Collection
+    {
+        return Product::query()
+            ->with('category:id,name')
+            ->where('category_id', $categoryId)
+            ->when($activeOnly, fn ($query) => $query->active())
+            ->latest('id')
+            ->get();
     }
 }

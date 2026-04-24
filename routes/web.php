@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CatalogVisualController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -17,7 +18,14 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/catalog', [CatalogVisualController::class, 'index'])->name('catalog.visual');
+
+    Route::patch('/categories/{category}/toggle-status', [CategoryController::class, 'toggleStatus'])
+        ->name('categories.toggle-status');
     Route::resource('categories', CategoryController::class)->except('show');
+
+    Route::patch('/products/{product}/toggle-status', [ProductController::class, 'toggleStatus'])
+        ->name('products.toggle-status');
     Route::resource('products', ProductController::class)->except('show');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

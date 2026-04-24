@@ -6,6 +6,7 @@ use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Services\Catalog\CategoryService;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
@@ -35,9 +36,11 @@ class CategoryController extends Controller
     {
         $this->categoryService->create($request->validated());
 
-        return redirect()
-            ->route('categories.index')
-            ->with('status', 'Categoria creada correctamente.');
+        return $this->redirectWithStatus(
+            $request,
+            'categories.index',
+            'Categoria creada correctamente.',
+        );
     }
 
     public function edit(Category $category): Response
@@ -51,17 +54,50 @@ class CategoryController extends Controller
     {
         $this->categoryService->update($category, $request->validated());
 
-        return redirect()
-            ->route('categories.index')
-            ->with('status', 'Categoria actualizada correctamente.');
+        return $this->redirectWithStatus(
+            $request,
+            'categories.index',
+            'Categoria actualizada correctamente.',
+        );
     }
 
-    public function destroy(Category $category): RedirectResponse
+    public function destroy(Request $request, Category $category): RedirectResponse
     {
         $this->categoryService->delete($category);
 
-        return redirect()
-            ->route('categories.index')
-            ->with('status', 'Categoria eliminada correctamente.');
+        return $this->redirectWithStatus(
+            $request,
+            'categories.index',
+            'Categoria eliminada correctamente.',
+        );
+    }
+
+    public function toggleStatus(Request $request, Category $category): RedirectResponse
+    {
+        $this->authorize('update', $category);
+
+        $this->categoryService->toggleStatus($category);
+
+        return $this->redirectWithStatus(
+            $request,
+            'categories.index',
+            $category->is_active
+                ? 'Categoria desactivada correctamente.'
+                : 'Categoria activada correctamente.',
+        );
+    }
+
+    private function redirectWithStatus(
+        Request $request,
+        string $defaultRoute,
+        string $status,
+    ): RedirectResponse {
+        $redirectTo = $request->string('redirect_to')->toString();
+
+        if ($redirectTo !== '' && str_starts_with($redirectTo, '/')) {
+            return redirect($redirectTo)->with('status', $status);
+        }
+
+        return redirect()->route($defaultRoute)->with('status', $status);
     }
 }

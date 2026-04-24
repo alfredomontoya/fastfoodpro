@@ -21,7 +21,9 @@ class Product extends Model
         'name',
         'description',
         'price',
+        'stock',
         'image_path',
+        'is_active',
     ];
 
     /**
@@ -35,6 +37,8 @@ class Product extends Model
     {
         return [
             'price' => 'decimal:2',
+            'stock' => 'integer',
+            'is_active' => 'boolean',
         ];
     }
 
@@ -59,6 +63,11 @@ class Product extends Model
         return $query->when($categoryId, function ($builder, $value) {
             $builder->where('category_id', $value);
         });
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
     }
 
     protected function imageUrl(): Attribute

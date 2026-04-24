@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Services\Catalog\CategoryService;
 use App\Services\Catalog\ProductService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -48,9 +49,11 @@ class ProductController extends Controller
     {
         $this->productService->create($request->validated());
 
-        return redirect()
-            ->route('products.index')
-            ->with('status', 'Producto creado correctamente.');
+        return $this->redirectWithStatus(
+            $request,
+            'products.index',
+            'Producto creado correctamente.',
+        );
     }
 
     public function edit(Product $product): Response
@@ -65,17 +68,50 @@ class ProductController extends Controller
     {
         $this->productService->update($product, $request->validated());
 
-        return redirect()
-            ->route('products.index')
-            ->with('status', 'Producto actualizado correctamente.');
+        return $this->redirectWithStatus(
+            $request,
+            'products.index',
+            'Producto actualizado correctamente.',
+        );
     }
 
-    public function destroy(Product $product): RedirectResponse
+    public function destroy(Request $request, Product $product): RedirectResponse
     {
         $this->productService->delete($product);
 
-        return redirect()
-            ->route('products.index')
-            ->with('status', 'Producto eliminado correctamente.');
+        return $this->redirectWithStatus(
+            $request,
+            'products.index',
+            'Producto eliminado correctamente.',
+        );
+    }
+
+    public function toggleStatus(Request $request, Product $product): RedirectResponse
+    {
+        $this->authorize('update', $product);
+
+        $this->productService->toggleStatus($product);
+
+        return $this->redirectWithStatus(
+            $request,
+            'products.index',
+            $product->is_active
+                ? 'Producto desactivado correctamente.'
+                : 'Producto activado correctamente.',
+        );
+    }
+
+    private function redirectWithStatus(
+        Request $request,
+        string $defaultRoute,
+        string $status,
+    ): RedirectResponse {
+        $redirectTo = $request->string('redirect_to')->toString();
+
+        if ($redirectTo !== '' && str_starts_with($redirectTo, '/')) {
+            return redirect($redirectTo)->with('status', $status);
+        }
+
+        return redirect()->route($defaultRoute)->with('status', $status);
     }
 }

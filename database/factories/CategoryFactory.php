@@ -19,7 +19,9 @@ class CategoryFactory extends Factory
     {
         return [
             'name' => fake()->unique()->words(2, true),
+            'description' => fake()->optional()->sentence(),
             'image_path' => null,
+            'is_active' => true,
         ];
     }
 }

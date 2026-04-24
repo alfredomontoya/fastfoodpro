@@ -16,6 +16,11 @@ export default function Authenticated({
             active: route().current('dashboard'),
         },
         {
+            label: 'POS',
+            href: route('catalog.visual'),
+            active: route().current('catalog.visual'),
+        },
+        {
             label: 'Categorias',
             href: route('categories.index'),
             active: route().current('categories.*'),

@@ -6,8 +6,11 @@ import type { FormEvent } from 'react';
 export function useCategoryForm(category?: Category) {
     const form = useForm<CategoryFormData>({
         name: category?.name ?? '',
+        description: category?.description ?? '',
+        is_active: category?.is_active ?? true,
         image: null,
         remove_image: false,
+        redirect_to: '',
     });
 
     const previewUrl = useImagePreview(

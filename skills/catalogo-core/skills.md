@@ -1,7 +1,7 @@
 # Skill: Catalogo
 
 ## Objetivo
-Implementar el módulo de catálogo para gestionar categorías y productos en el sistema de ventas.
+Implementar el módulo base de catálogo para gestionar categorías y productos en el sistema de ventas.
 
 ---
 
@@ -48,11 +48,6 @@ Implementar el módulo de catálogo para gestionar categorías y productos en el
 - Relación: belongsTo(Categoria)
 - Controlador: ProductoController
 - CRUD completo
-- Validaciones:
-  - nombre requerido
-  - precio > 0
-  - stock >= 0
-  - categoria_id válido
 
 ### API
 - Rutas REST
@@ -64,40 +59,25 @@ Implementar el módulo de catálogo para gestionar categorías y productos en el
 ## Frontend (React + TypeScript)
 
 ### Categorías
-- Página de listado
+- Listado
 - Crear / editar
 - Activar / desactivar
 
 ### Productos
-- Listado con:
-  - filtro por categoría
-  - búsqueda por nombre
+- Listado
 - Crear / editar
-- Selector de categoría (dropdown)
-- Validaciones en formulario
+- Filtro por categoría
 
 ---
 
 ## Arquitectura Frontend
 
-- Separar lógica en hooks:
+- Hooks:
   - useCategorias
   - useProductos
 - Servicios API:
   - categoriaService
   - productoService
-- Componentes reutilizables:
-  - Formulario
-  - Tabla
-
----
-
-## UX/UI
-
-- Formularios claros
-- Validaciones visibles
-- Mensajes de éxito/error
-- Listados paginados
 
 ---
 
@@ -105,5 +85,4 @@ Implementar el módulo de catálogo para gestionar categorías y productos en el
 
 - CRUD completo de categorías
 - CRUD completo de productos
-- Relación entre ambos funcionando correctamente
-- Listado con filtros
+- Relación funcionando correctamente

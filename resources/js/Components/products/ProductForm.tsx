@@ -109,6 +109,30 @@ export default function ProductForm({
                             />
                         </div>
 
+                        <div>
+                            <InputLabel htmlFor="stock" value="Stock" />
+                            <TextInput
+                                id="stock"
+                                type="number"
+                                min="0"
+                                step="1"
+                                value={form.data.stock}
+                                className="mt-2 block w-full rounded-2xl border-slate-200 px-4 py-3 shadow-none focus:border-orange-400 focus:ring-orange-400"
+                                onChange={(event) =>
+                                    form.setData(
+                                        'stock',
+                                        event.target.value
+                                            ? Number(event.target.value)
+                                            : '',
+                                    )
+                                }
+                            />
+                            <InputError
+                                message={form.errors.stock}
+                                className="mt-2"
+                            />
+                        </div>
+
                         <div className="md:col-span-2">
                             <InputLabel
                                 htmlFor="description"
@@ -131,6 +155,25 @@ export default function ProductForm({
                                 className="mt-2"
                             />
                         </div>
+
+                        <label className="md:col-span-2 flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50/70 px-4 py-3">
+                            <div>
+                                <p className="text-sm font-medium text-slate-900">
+                                    Producto activo
+                                </p>
+                                <p className="text-xs text-slate-500">
+                                    Visible en el catalogo operativo.
+                                </p>
+                            </div>
+                            <input
+                                type="checkbox"
+                                checked={form.data.is_active}
+                                onChange={(event) =>
+                                    form.setData('is_active', event.target.checked)
+                                }
+                                className="h-5 w-5 rounded border-slate-300 text-orange-500 focus:ring-orange-400"
+                            />
+                        </label>
                     </div>
 
                     <PrimaryButton

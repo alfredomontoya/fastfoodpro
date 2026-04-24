@@ -18,9 +18,13 @@ export interface PaginatedResponse<T> {
 export interface Category {
     id: number;
     name: string;
+    description?: string | null;
+    is_active?: boolean;
     image_url: string | null;
     products_count?: number;
+    active_products_count?: number;
     created_at?: string;
+    updated_at?: string;
 }
 
 export interface Product {
@@ -29,8 +33,12 @@ export interface Product {
     name: string;
     description: string | null;
     price: string;
+    stock?: number;
+    is_active?: boolean;
     image_url: string | null;
     category: Pick<Category, 'id' | 'name'>;
+    created_at?: string;
+    updated_at?: string;
 }
 
 export interface CatalogFilters {
@@ -40,8 +48,11 @@ export interface CatalogFilters {
 
 export interface CategoryFormData {
     name: string;
+    description: string;
+    is_active: boolean;
     image: File | null;
     remove_image: boolean;
+    redirect_to: string;
 }
 
 export interface ProductFormData {
@@ -49,6 +60,9 @@ export interface ProductFormData {
     name: string;
     description: string;
     price: string;
+    stock: number | '';
+    is_active: boolean;
     image: File | null;
     remove_image: boolean;
+    redirect_to: string;
 }

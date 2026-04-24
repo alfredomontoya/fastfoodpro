@@ -23,7 +23,9 @@ class ProductFactory extends Factory
             'name' => fake()->unique()->words(3, true),
             'description' => fake()->sentence(),
             'price' => fake()->randomFloat(2, 5, 120),
+            'stock' => fake()->numberBetween(0, 100),
             'image_path' => null,
+            'is_active' => true,
         ];
     }
 }

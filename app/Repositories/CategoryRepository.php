@@ -28,6 +28,13 @@ class CategoryRepository
             ->find($id);
     }
 
+    public function findActiveById(int $id): ?Category
+    {
+        return Category::query()
+            ->active()
+            ->find($id);
+    }
+
     /**
      * @param array<string, mixed> $data
      */
@@ -58,7 +65,23 @@ class CategoryRepository
     public function listForSelect(): Collection
     {
         return Category::query()
+            ->active()
             ->orderBy('name')
             ->get(['id', 'name']);
+    }
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function listForVisual(): Collection
+    {
+        return Category::query()
+            ->withCount([
+                'products',
+                'products as active_products_count' => fn ($query) => $query->where('is_active', true),
+            ])
+            ->orderByDesc('is_active')
+            ->orderBy('name')
+            ->get();
     }
 }

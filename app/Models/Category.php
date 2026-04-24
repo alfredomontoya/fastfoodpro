@@ -18,8 +18,17 @@ class Category extends Model
      */
     protected $fillable = [
         'name',
+        'description',
         'image_path',
+        'is_active',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+        ];
+    }
 
     /**
      * @var list<string>
@@ -36,8 +45,17 @@ class Category extends Model
     public function scopeSearch($query, ?string $search)
     {
         return $query->when($search, function ($builder, $value) {
-            $builder->where('name', 'like', '%'.$value.'%');
+            $builder->where(function ($nested) use ($value) {
+                $nested
+                    ->where('name', 'like', '%'.$value.'%')
+                    ->orWhere('description', 'like', '%'.$value.'%');
+            });
         });
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
     }
 
     protected function imageUrl(): Attribute

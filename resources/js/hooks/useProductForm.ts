@@ -9,8 +9,11 @@ export function useProductForm(product?: Product) {
         name: product?.name ?? '',
         description: product?.description ?? '',
         price: product?.price ?? '',
+        stock: product?.stock ?? '',
+        is_active: product?.is_active ?? true,
         image: null,
         remove_image: false,
+        redirect_to: '',
     });
 
     const previewUrl = useImagePreview(

@@ -17,14 +17,20 @@ export default function Dashboard() {
                     actions={
                         <div className="flex flex-wrap gap-3">
                             <Link
-                                href={route('categories.index')}
+                                href={route('catalog.visual')}
                                 className="rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
+                            >
+                                Abrir POS
+                            </Link>
+                            <Link
+                                href={route('categories.index')}
+                                className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-medium text-slate-700 transition hover:border-orange-200 hover:text-orange-600"
                             >
                                 Ver categorias
                             </Link>
                             <Link
                                 href={route('products.index')}
-                                className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-medium text-slate-700 transition hover:border-orange-200 hover:text-orange-600"
+                                className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-medium text-slate-700 transition hover:border-sky-200 hover:text-sky-700"
                             >
                                 Explorar productos
                             </Link>

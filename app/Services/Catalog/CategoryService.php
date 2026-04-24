@@ -38,13 +38,23 @@ class CategoryService
     }
 
     /**
+     * @return Collection<int, Category>
+     */
+    public function listForVisual(): Collection
+    {
+        return $this->categoryRepository->listForVisual();
+    }
+
+    /**
      * @param array{name: string, image?: UploadedFile|null} $data
      */
     public function create(array $data): Category
     {
         return $this->categoryRepository->create([
             'name' => $data['name'],
+            'description' => $data['description'] ?? null,
             'image_path' => $this->storeImage($data['image'] ?? null),
+            'is_active' => $data['is_active'] ?? true,
         ]);
     }
 
@@ -67,7 +77,9 @@ class CategoryService
 
         return $this->categoryRepository->update($category, [
             'name' => $data['name'],
+            'description' => $data['description'] ?? null,
             'image_path' => $imagePath,
+            'is_active' => $data['is_active'] ?? $category->is_active,
         ]);
     }
 
@@ -75,6 +87,13 @@ class CategoryService
     {
         $this->deleteImage($category->image_path);
         $this->categoryRepository->delete($category);
+    }
+
+    public function toggleStatus(Category $category): Category
+    {
+        return $this->categoryRepository->update($category, [
+            'is_active' => ! $category->is_active,
+        ]);
     }
 
     private function storeImage(?UploadedFile $image): ?string
